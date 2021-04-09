@@ -1,0 +1,11 @@
+{
+  "Name": "Voxel",
+  "Description": "",
+  "Version": "1.0.9",
+  "HasVeniceEXT": true,
+  "HasWebUI": false,
+  "Dependencies": {
+      "veniceext": "^1.0.0"
+  },
+  "Tags": []
+}
