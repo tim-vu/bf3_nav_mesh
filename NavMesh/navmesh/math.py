@@ -14,23 +14,48 @@ class LineSegment(NamedTuple):
     b: Vec2
 
 
-# https://rootllama.wordpress.com/2014/06/20/ray-line-segment-intersection-test-in-2d/
+# https://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect/
 def get_intersection(ray: Ray, line_segment: LineSegment):
 
-    v1 = ray.origin - line_segment.a
-    v2 = line_segment.b - line_segment.a
-    v3 = Vec2(-ray.direction.z, ray.direction.x)
+    p = ray.origin
+    r = ray.direction
 
-    t1 = abs(v2.cross(v1)) / v2.dot(v3)
-    t2 = v1.dot(v3) / v2.dot(v3)
+    q = line_segment.a
+    s = line_segment.b - line_segment.a
 
-    if t1 >= 0 and 0 <= t2 <= 1:
-        return ray.origin + t1*ray.direction
+    num = (q - p).cross(s)
+    denom = r.cross(s)
+
+    if denom == 0 and num == 0:
+
+        t0 = (q - p).dot(r)/r.dot(r)
+        t1 = t0 + s.dot(r)/r.dot(r)
+
+        if t0 < 0 and t1 < 0:
+            return None
+
+        if t0 < 0:
+            return t1
+
+        return t0
+
+    if denom == 0 and num != 0:
+        return None
+
+    t = num / denom
+
+    if t < 0:
+        return None
+
+    u = (p - q).cross(r) / s.cross(r)
+
+    if 0 <= u <= 1:
+        return p + t*r
 
     return None
 
 
-t_ray = Ray(Vec2(0, 0), Vec2(1, 0))
-segment = LineSegment(Vec2(0.9, 0.5), Vec2(1, -0.5))
+t_ray = Ray(Vec2(0, 0,), Vec2(1, 0))
+segment = LineSegment(Vec2(-1, 0), (Vec2(-0.01, 0)))
 
 print(get_intersection(t_ray, segment))

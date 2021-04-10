@@ -17,6 +17,8 @@ class Vec2(NamedTuple):
     def __mul__(self, scalar):
         return Vec2(self.x*scalar, self.z*scalar)
 
+    __rmul__ = __mul__
+
     def distance(self, other):
         return math.sqrt((other.x - self.x)**2 + (other.z - self.z)**2)
 
